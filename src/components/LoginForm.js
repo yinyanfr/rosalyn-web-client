@@ -3,6 +3,14 @@ import { Form, Input, Button, Checkbox, Spin, Alert } from 'antd'
 import useReq from '../services/useReq'
 import AppContext from '../AppContext'
 
+const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+}
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+}
+
 const LoginForm = ({ register }) => {
 
     const [run, { loading, res, err }] = useReq("POST", (register ? "/register" : "/login"))
@@ -26,6 +34,7 @@ const LoginForm = ({ register }) => {
     return (
         <Spin spinning={loading}>
             <Form
+                {...layout}
                 name="login"
                 initialValues={{ remember: true }}
                 onFinish={submit}
@@ -58,13 +67,13 @@ const LoginForm = ({ register }) => {
 
                         )
                         : (
-                            <Form.Item name="remember" valuePropName="checked">
+                            <Form.Item name="remember" valuePropName="checked" {...tailLayout}>
                                 <Checkbox>Remember me</Checkbox>
                             </Form.Item>
                         )
                 }
 
-                <Form.Item>
+                <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
@@ -75,7 +84,7 @@ const LoginForm = ({ register }) => {
                     ? (
                         <Alert
                             message="Failed"
-                            description={err}
+                            description={JSON.stringify(err.response?.text)}
                             type="error"
                         />
                     )

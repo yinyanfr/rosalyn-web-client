@@ -11,7 +11,7 @@ const useReq = (type, uri) => {
     const [res, setRes] = useState(null)
     const [err, setErr] = useState(null)
 
-    const run = ({body, query, params, token}) => {
+    const run = ({body, query, params, token} = {}) => {
         if(type.toLowerCase() === "GET"){
             return (
                 request.get(params ? withParams(uri, params) : uri)

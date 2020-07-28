@@ -5,6 +5,7 @@ import useReq from './services/useReq'
 import { message, Spin } from "antd"
 import Auth from './middlewares/Auth'
 import App from './App'
+import Admin from './components/Admin'
 
 const AppRouter = () => {
 
@@ -43,6 +44,11 @@ const AppRouter = () => {
                         <Route exact path="/">
                             <Auth>
                                 <App />
+                            </Auth>
+                        </Route>
+                        <Route path="/admin">
+                            <Auth rank="Admin">
+                                <Admin />
                             </Auth>
                         </Route>
                     </Switch>

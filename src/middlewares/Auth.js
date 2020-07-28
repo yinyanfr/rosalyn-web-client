@@ -15,7 +15,7 @@ const outrank = (user, rank) => ranks.indexOf(user.rank) >= ranks.indexOf(rank)
 
 const Auth = ({children, rank="User"}) => {
     const {user} = useContext(AppContext)
-
+    
     return (
         user
         ? (

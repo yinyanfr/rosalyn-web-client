@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, Checkbox, Spin, message } from 'antd'
 import useReq from '../../services/useReq'
 
+const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+}
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+}
+
 const LibraryForm = () => {
 
     const [add, { loading, res, err }] = useReq("POST", "/library/add")
@@ -12,19 +20,20 @@ const LibraryForm = () => {
             body: { path, rec, name, description },
             token,
         })
-        .then(() => {
-            message.success("Successfully added a repository")
-        })
-        .catch(err => {
-            message.error("Failed to add this repostory.")
-        })
     }
+
+    useEffect(() => {
+        if(res) message.success("Successfully added a repository")
+        if(err) message.error("Failed to add this repostory.")
+    }, [res, err])
 
 
     return (
         <Spin spinning={loading}>
             <Form
+                {...layout}
                 name="add_dir"
+                onFinish={addDir}
             >
                 <Form.Item
                     label="Path"
@@ -35,7 +44,7 @@ const LibraryForm = () => {
                     <Input />
                 </Form.Item>
 
-                <Form.Item name="rec" valuePropName="checked">
+                <Form.Item name="rec" valuePropName="checked" {...tailLayout}>
                     <Checkbox>including children repos</Checkbox>
                 </Form.Item>
 
@@ -53,7 +62,7 @@ const LibraryForm = () => {
                     <Input.TextArea rows={10} />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
                         Add Library
                     </Button>
