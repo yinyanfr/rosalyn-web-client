@@ -3,11 +3,11 @@ import { Form, Input, Button, Checkbox, Spin, message } from 'antd'
 import useReq from '../../services/useReq'
 
 const layout = {
-    labelCol: { span: 8 },
+    labelCol: { span: 2 },
     wrapperCol: { span: 16 },
 }
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 2, span: 16 },
 }
 
 const LibraryForm = () => {

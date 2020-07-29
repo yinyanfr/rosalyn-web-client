@@ -6,6 +6,7 @@ const Library = () => {
 
     return (
         <div>
+            <h1>Library Repositories Management</h1>
             <LibraryForm />
             <LibraryTable />
         </div>

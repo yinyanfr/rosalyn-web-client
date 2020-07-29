@@ -30,13 +30,12 @@ const columns = (update, setModal) => ([
                 <Button
                     type="primary"
                     onClick={() => {
-                        update({ path: record.path, token })
+                        update({ body: { path: record.path }, token })
                     }}
-                    disabled
                 >
                     Update
                 </Button>
-                
+
                 <Button
                     danger
                     onClick={() => {
@@ -56,6 +55,8 @@ const LibraryTable = () => {
     const [remove, removeReq] = useReq("DELETE", "/library/remove")
     const [modal, setModal] = useState(false)
 
+    console.log(res)
+
     useEffect(() => {
         const token = localStorage.getItem("token")
         getlibs({ token })
@@ -64,25 +65,19 @@ const LibraryTable = () => {
     useEffect(() => {
         if (updateReq.res) message.success("Successfully updated your library.")
         if (removeReq.res) message.success("Successfully removed your library.")
-        if (updateReq.res) message.success("Successfully updated your library.")
-        if (updateReq.res) message.success("Successfully updated your library.")
+        if (updateReq.err) message.error("Failed to update your library.")
+        if (removeReq.err) message.error("Failed to remove your library.")
     }, [updateReq, removeReq])
 
     return (
         <>
-            {
-                res?.body
-                    ? (
-                        <Spin spinning={updateReq?.loading || removeReq?.loading}>
-                            <Table
-                                // title="Libraries"
-                                columns={columns(update, setModal)}
-                                dataSource={res.body.map(e => ({ ...e, key: e._id }))}
-                            />
-                        </Spin>
-                    )
-                    : <Empty />
-            }
+            <Spin spinning={updateReq?.loading || removeReq?.loading}>
+                <Table
+                    // title="Libraries"
+                    columns={columns(update, setModal)}
+                    dataSource={res?.body.map(e => ({ ...e, key: e._id }))}
+                />
+            </Spin>
             <Modal
                 title="confirm"
                 visible={modal}
@@ -91,9 +86,9 @@ const LibraryTable = () => {
                 }}
                 confirmLoading={removeReq.loading}
                 onOk={() => {
-                    remove({libraryId: modal, token})
+                    remove({ body: { libraryId: modal }, token })
                 }}
-                okButtonProps={{danger: true}}
+                okButtonProps={{ danger: true }}
             >
                 <p>This operation is irreversable and is going to remove all music added with this repo.</p>
             </Modal>

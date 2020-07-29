@@ -6,6 +6,8 @@ import { message, Spin } from "antd"
 import Auth from './middlewares/Auth'
 import App from './App'
 import Admin from './components/Admin'
+import FOF from './404'
+import Music from './components/Music'
 
 const AppRouter = () => {
 
@@ -46,10 +48,17 @@ const AppRouter = () => {
                                 <App />
                             </Auth>
                         </Route>
+                        <Route path="/music">
+                            <Music />
+                        </Route>
                         <Route path="/admin">
                             <Auth rank="Admin">
                                 <Admin />
                             </Auth>
+                        </Route>
+
+                        <Route>
+                            <FOF />
                         </Route>
                     </Switch>
                 </Router>
