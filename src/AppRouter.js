@@ -43,17 +43,9 @@ const AppRouter = () => {
             }>
                 <Router>
                     <Switch>
-                        <Route exact path="/">
+                        <Route path="/">
                             <Auth>
                                 <App />
-                            </Auth>
-                        </Route>
-                        <Route path="/music">
-                            <Music />
-                        </Route>
-                        <Route path="/admin">
-                            <Auth rank="Admin">
-                                <Admin />
                             </Auth>
                         </Route>
 

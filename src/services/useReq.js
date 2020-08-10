@@ -12,7 +12,7 @@ const useReq = (type, uri) => {
     const [err, setErr] = useState(null)
 
     const run = ({body, query, params, token} = {}) => {
-        if(type.toLowerCase() === "GET"){
+        if(type.toLowerCase() === "get"){
             return (
                 request.get(params ? withParams(uri, params) : uri)
                     .set("x-auth", token ? token : "")

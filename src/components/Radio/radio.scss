@@ -1,0 +1,25 @@
+.single-music {
+    display: flex;
+}
+
+.music-icon-image {
+    height: 50vh;
+}
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 10vw;
+
+    width: 100%;
+}
+
+.music-favor {
+    font-size: 250%;
+
+    display: flex;
+    gap: 30px;
+}

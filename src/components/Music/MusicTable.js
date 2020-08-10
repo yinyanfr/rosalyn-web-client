@@ -210,7 +210,7 @@ const MusicTable = () => {
                         loading={loading}
                         size="small"
                     />
-                    {data ? <Player music={data} /> : ""}
+                    {/* {data ? <Player music={data} /> : ""} */}
                 </>
             )
             : ""
