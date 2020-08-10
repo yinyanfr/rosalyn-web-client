@@ -6,6 +6,7 @@ import useReq from '../../services/useReq'
 import moment from "moment"
 import momentDurationFormatSetup from "moment-duration-format"
 import Player from '../Player'
+import note1024 from "../../assets/note1024.png"
 
 momentDurationFormatSetup(moment)
 
@@ -134,9 +135,11 @@ const MusicTable = () => {
         {
             dataIndex: "picture", key: "picture",
             render: (picture) => (
-                picture.length
-                    ? <Avatar src={`data:${picture[0].format};base64,${picture[0].data}`} />
-                    : ""
+                <Avatar src={
+                    picture.length
+                    ? `data:${picture[0].format};base64,${picture[0].data}`
+                    : note1024
+                } />
             )
         },
         {
@@ -159,13 +162,6 @@ const MusicTable = () => {
         {
             title: "Duration", dataIndex: "duration", key: "duration",
             render: duration => moment.duration(duration, "seconds").format("mm:ss"),
-            responsive: ["md", "lg"]
-        },
-        {
-            key: "info",
-            render: () => (
-                <ProfileOutlined />
-            ),
             responsive: ["md", "lg"]
         },
         {

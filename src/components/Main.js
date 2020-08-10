@@ -5,6 +5,8 @@ import Music from './Music'
 import Radio from "./Radio"
 import "./Main.scss"
 import { BrowserRouter as Router, Route, Switch, useHistory, useLocation } from 'react-router-dom'
+import Auth from "../middlewares/Auth"
+import Admin from "./Admin"
 
 const { Header, Content, Footer } = Layout
 
@@ -48,6 +50,12 @@ const Main = () => {
 
                     <Route path="/setting">
 
+                    </Route>
+
+                    <Route path="/admin">
+                        <Auth rank="Admin">
+                            <Admin />
+                        </Auth>
                     </Route>
 
                     <Route>

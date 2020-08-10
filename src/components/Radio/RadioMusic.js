@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import {Typography} from "antd"
+import { Typography } from "antd"
 import {
     HeartFilled, HeartOutlined,
     DeleteOutlined,
     StepForwardOutlined,
 } from "@ant-design/icons"
 
-const {Title} = Typography
+const { Title } = Typography
 
 const RadioMusic = ({ audioInfo }) => {
     const {
@@ -16,15 +16,11 @@ const RadioMusic = ({ audioInfo }) => {
     return (
         <article className="single-music">
             <div className="music-icon">
-                {
-                    picture
-                        ? <img
-                            className="music-icon-image"
-                            alt="cover"
-                            src={picture}
-                        />
-                        : ""
-                }
+                <img
+                    className="music-icon-image"
+                    alt="cover"
+                    src={picture}
+                />
             </div>
             <div className="music-info">
                 <div className="music-info-group">

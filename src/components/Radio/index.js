@@ -35,8 +35,8 @@ const Radio = () => {
 
     const onTrackChange = (currentPlayId, audioLists) => {
         let audioInfo = audioLists.find(e => e.id === currentPlayId)
-        if(audioInfo){
-            const {name, singer, cover, album, _id} = audioInfo
+        if (audioInfo) {
+            const { name, singer, cover, album, _id } = audioInfo
             setAudioInfo({
                 title: name,
                 artist: singer,
@@ -49,9 +49,13 @@ const Radio = () => {
 
     return (
         <section>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Radio</Breadcrumb.Item>
-            </Breadcrumb>
+            {
+                <div className="desktop-only">
+                    <Breadcrumb style={{ margin: '16px 0' }}>
+                        <Breadcrumb.Item>Radio</Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+            }
             <Spin spinning={loading}>
                 <Layout className="site-layout-background">
                     <Content style={{ minHeight: 280 }}>

@@ -2,6 +2,13 @@
     display: flex;
 }
 
+.music-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
 .music-icon-image {
     height: 50vh;
 }
@@ -22,4 +29,10 @@
 
     display: flex;
     gap: 30px;
+}
+
+@media only screen and (max-width: 720px){
+    .single-music {
+        flex-direction: column;
+    }
 }
