@@ -1,31 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import "./radio.scss"
 import Player from '../Player'
 import { Layout, Breadcrumb, Spin, message } from 'antd'
 import RadioMusic from './RadioMusic'
 import useReq from '../../services/useReq'
+import MainContext from '../MainContext'
+import note2014 from "../../assets/note1024.png"
 
 const { Header, Content, Footer } = Layout
 
 const Radio = () => {
     const [sample, { loading, res, err }] = useReq("GET", "/music/sample")
 
-    const [playlist, setPlaylist] = useState([])
-    const [audioInfo, setAudioInfo] = useState(null)
+    const {
+        playlist, setPlaylist,
+        audioInfo, setAudioInfo,
+        player,
+    } = useContext(MainContext)
 
 
     useEffect(() => {
-        sample({ params: [20], token: localStorage.getItem("token") })
+        const token = localStorage.getItem("token")
+        player.clear()
+        sample({ params: [20], token })
     }, [])
 
     useEffect(() => {
         if (res) {
             let tmp = [...res.body]
             tmp.sort(() => Math.random() - 0.5)
-            setPlaylist(tmp)
+            setPlaylist(() => tmp)
             setAudioInfo({
                 ...tmp[0],
-                picture: tmp[0].picture[0] ? `data:${tmp[0].picture[0].format};base64,${tmp[0].picture[0].data}` : ""
+                picture: tmp[0].picture[0] ? `data:${tmp[0].picture[0].format};base64,${tmp[0].picture[0].data}` : note2014
             })
         }
         if (err) {
@@ -33,19 +40,6 @@ const Radio = () => {
         }
     }, [res, err])
 
-    const onTrackChange = (currentPlayId, audioLists) => {
-        let audioInfo = audioLists.find(e => e.id === currentPlayId)
-        if (audioInfo) {
-            const { name, singer, cover, album, _id } = audioInfo
-            setAudioInfo({
-                title: name,
-                artist: singer,
-                picture: [cover],
-                album,
-                _id,
-            })
-        }
-    }
 
     return (
         <section>
@@ -67,12 +61,6 @@ const Radio = () => {
                     </Content>
                 </Layout>
             </Spin>
-            <Footer>
-                <Player
-                    music={playlist}
-                    onTrackChange={onTrackChange}
-                />
-            </Footer>
         </section>
     )
 }

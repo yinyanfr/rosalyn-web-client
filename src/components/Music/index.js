@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import MusicTable from './MusicTable'
-import Player from '../Player'
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Breadcrumb } from 'antd'
 
-const { Header, Content, Footer } = Layout
+const { Content } = Layout
 
 const Music = () => {
-
-    const stored = localStorage.getItem("playlist")
-
-    const [playlist, setPlaylist] = useState(
-        stored ? JSON.parse(stored) : []
-    )
 
     return (
         <section>
@@ -20,12 +13,9 @@ const Music = () => {
             </Breadcrumb>
             <Layout className="site-layout-background">
                 <Content style={{ minHeight: 280 }}>
-                    <MusicTable setPlaylist={setPlaylist} />
+                    <MusicTable />
                 </Content>
             </Layout>
-            <Footer>
-                <Player music={playlist} />
-            </Footer>
         </section>
     )
 }

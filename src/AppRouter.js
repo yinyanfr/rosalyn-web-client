@@ -44,9 +44,7 @@ const AppRouter = () => {
                 <Router>
                     <Switch>
                         <Route path="/">
-                            <Auth>
-                                <App />
-                            </Auth>
+                            <App />
                         </Route>
 
                         <Route>

@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import ReactJkMusicPlayer from "react-jinke-music-player"
 import "react-jinke-music-player/assets/index.css"
-import {message} from "antd"
+import { message } from "antd"
 import note1024 from "../../assets/note1024.png"
-
-const token = localStorage.getItem("token")
+import MainContext from '../MainContext'
 
 const convert = (music) => {
+    const token = localStorage.getItem("token")
     return music.map(({
         title: name,
         artist: singer,
@@ -22,10 +22,10 @@ const convert = (music) => {
     }))
 }
 
-const Player = ({music, onTrackChange, getplayer}) => {
+const Player = ({ music, onTrackChange, getPlayer }) => {
 
     return (
-        <ReactJkMusicPlayer 
+        <ReactJkMusicPlayer
             glassBg
             showMediaSession
             audioLists={convert(music)}
@@ -37,20 +37,17 @@ const Player = ({music, onTrackChange, getplayer}) => {
             showDownload={false}
             spaceBar
             showThemeSwitch={false}
-            defaultPosition={{bottom: 20, right: 10}}
+            defaultPosition={{ bottom: 20, right: 10 }}
             onAudioPlayTrackChange={
                 onTrackChange
-                ? onTrackChange
-                : () => {}
+                    ? onTrackChange
+                    : () => { }
             }
             onAudioError={(errMsg) => {
-                message.error(errMsg)
+                message.error("error")
+                console.log(errMsg)
             }}
-            getAudioInstance={
-                getplayer
-                ? getplayer
-                : () => {}
-            }
+            getAudioInstance={getPlayer}
         />
     )
 }

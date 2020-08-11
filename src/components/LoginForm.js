@@ -4,11 +4,11 @@ import useReq from '../services/useReq'
 import AppContext from '../AppContext'
 
 const layout = {
-    labelCol: { span: 8 },
+    labelCol: { span: 2 },
     wrapperCol: { span: 16 },
 }
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 2, span: 16 },
 }
 
 const LoginForm = ({ register }) => {

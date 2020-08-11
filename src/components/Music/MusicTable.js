@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Table, Input, Button, Space, message, Avatar } from 'antd'
 import Highlighter from 'react-highlight-words'
 import { SearchOutlined, CaretRightOutlined, PlusOutlined, HeartOutlined, HeartFilled, DownloadOutlined, ProfileOutlined } from '@ant-design/icons'
 import useReq from '../../services/useReq'
 import moment from "moment"
 import momentDurationFormatSetup from "moment-duration-format"
-import Player from '../Player'
 import note1024 from "../../assets/note1024.png"
+import MainContext from '../MainContext'
 
 momentDurationFormatSetup(moment)
 
 const MusicTable = () => {
+    const {
+        playlist, setPlaylist,
+        player,
+    } = useContext(MainContext)
+
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
 
     const [getAllMusic, { loading, res: allMusic, err }] = useReq("GET", "/music/all")
     const [data, setData] = useState(allMusic?.body)
+
+    let playNow = false
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -27,9 +34,21 @@ const MusicTable = () => {
         if (allMusic) setData(allMusic.body)
         if (err) {
             console.log(err)
-            message.err("Failed to load music.")
+            message.error("Failed to load music.")
         }
     }, [allMusic, err])
+
+    useEffect(() => {
+        if(player && playNow){
+            if(playlist.length > 1){
+                player.playNext()
+            }
+            else {
+                player.play()
+            }
+        }
+        localStorage.setItem("playlist", JSON.stringify(playlist))
+    }, [playlist])
 
     const start = () => {
         setTimeout(() => {
@@ -137,8 +156,8 @@ const MusicTable = () => {
             render: (picture) => (
                 <Avatar src={
                     picture.length
-                    ? `data:${picture[0].format};base64,${picture[0].data}`
-                    : note1024
+                        ? `data:${picture[0].format};base64,${picture[0].data}`
+                        : note1024
                 } />
             )
         },
@@ -164,17 +183,36 @@ const MusicTable = () => {
             render: duration => moment.duration(duration, "seconds").format("mm:ss"),
             responsive: ["md", "lg"]
         },
-        {
-            key: "play",
-            render: () => (
-                <CaretRightOutlined />
-            )
-        },
+        // {
+        //     key: "play",
+        //     render: () => (
+        //         <CaretRightOutlined />
+        //     ),
+        //     onCell: record => ({
+        //         onClick: () => {
+        //             playNow = true
+        //             player.clear()
+        //             setPlaylist(playlist => ([
+        //                 record,
+        //                 ...playlist,
+        //             ]))
+        //         }
+        //     })
+        // },
         {
             key: "add_to_playlist",
             render: () => (
                 <PlusOutlined />
-            )
+            ),
+            onCell: (record) => ({
+                onClick: () => {
+                    playNow = false
+                    setPlaylist(playlist => ([
+                        ...playlist,
+                        record,
+                    ]))
+                }
+            })
         },
         {
             key: "favor",
@@ -206,7 +244,6 @@ const MusicTable = () => {
                         loading={loading}
                         size="small"
                     />
-                    {/* {data ? <Player music={data} /> : ""} */}
                 </>
             )
             : ""
