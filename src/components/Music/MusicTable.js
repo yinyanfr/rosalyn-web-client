@@ -208,8 +208,12 @@ const MusicTable = () => {
                 onClick: () => {
                     // FIXME: ghost bug.
                     // while url is correct, everything is correct, it fails to load music
-                    player.appendAudio(playlist.length, [convertOne(record)])
-                    player.play()
+                    if(playlist.length){
+                        player.appendAudio(playlist.length, [convertOne(record)])
+                    }
+                    else {
+                        setPlaylist([record])
+                    }
                 }
             })
         },

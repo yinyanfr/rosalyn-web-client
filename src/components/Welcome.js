@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'antd'
 
 const Welcome = () => {
 
@@ -26,6 +27,15 @@ const Welcome = () => {
             <p>You know how to contact me.</p>
 
             <p>There is a ghost bug when adding new songs to playlist, while url is correct, il does not load the audio file.</p>
+
+            <Button
+                type="primary"
+                onClick={() => {
+                    localStorage.setItem("welcomed", "a")
+                }}
+            >
+                Understandable
+            </Button>
         </div>
     )
 }

@@ -23,7 +23,8 @@ const Main = () => {
     const stored = localStorage.getItem("playlist")
 
     const [playlist, setPlaylistRaw] = useState(
-        stored ? JSON.parse(stored) : []
+        // stored ? JSON.parse(stored) : []
+        []
     )
 
     const setPlaylist = music => {
@@ -33,7 +34,7 @@ const Main = () => {
     const [audioInfo, setAudioInfo] = useState(null)
     const [player, setPlayer] = useState(null)
 
-    const [drawer, setDrawer] = useState(true)
+    const [drawer, setDrawer] = useState(false)
 
     const onTrackChange = (currentPlayId, audioLists) => {
         let audioInfo = audioLists.find(e => e.id === currentPlayId)

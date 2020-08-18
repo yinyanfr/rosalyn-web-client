@@ -17,8 +17,10 @@ const Player = ({
             showMediaSession
             audioLists={music}
             // remember={true}
-            autoPlay
-            mode={window.innerWidth < 720 ? "mini" : "full"}
+            autoPlay={false}
+            // mode={window.innerWidth < 720 ? "mini" : "full"}
+            // mode={music.length ? "full" : "mini"}
+            mode="full"
             showReload={false}
             showLyric
             showDownload={false}
