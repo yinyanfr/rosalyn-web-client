@@ -3,34 +3,21 @@ import ReactJkMusicPlayer from "react-jinke-music-player"
 import "react-jinke-music-player/assets/index.css"
 import { message } from "antd"
 import note1024 from "../../assets/note1024.png"
-import MainContext from '../MainContext'
+import {useHistory} from "react-router-dom"
 
-const convert = (music) => {
-    const token = localStorage.getItem("token")
-    return music.map(({
-        title: name,
-        artist: singer,
-        duration, picture,
-        _id,
-        album,
-    }) => ({
-        name, singer, duration,
-        cover: picture[0] ? `data:${picture[0].format};base64,${picture[0].data}` : note1024,
-        musicSrc: `/music/download/${token}/${_id}`,
-        album,
-        _id,
-    }))
-}
+const Player = ({
+    music, onTrackChange, getPlayer, onAudioPlay
+}) => {
 
-const Player = ({ music, onTrackChange, getPlayer }) => {
+    const history = useHistory()
 
     return (
         <ReactJkMusicPlayer
             glassBg
             showMediaSession
-            audioLists={convert(music)}
-            remember={true}
-            autoPlay={false}
+            audioLists={music}
+            // remember={true}
+            autoPlay
             mode={window.innerWidth < 720 ? "mini" : "full"}
             showReload={false}
             showLyric
@@ -44,10 +31,18 @@ const Player = ({ music, onTrackChange, getPlayer }) => {
                     : () => { }
             }
             onAudioError={(errMsg) => {
-                message.error("error")
+                message.error("audio error")
                 console.log(errMsg)
             }}
             getAudioInstance={getPlayer}
+            onAudioPlay={onAudioPlay}
+            onCoverClick={() => {
+                history.push("/player")
+            }}
+            onAudioListsChange={(currentPlayId,audioLists,audioInfo) => {
+                console.log(audioLists)
+                console.log(audioInfo)
+            }}
         />
     )
 }

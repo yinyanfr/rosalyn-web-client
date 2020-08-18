@@ -7,12 +7,13 @@ import moment from "moment"
 import momentDurationFormatSetup from "moment-duration-format"
 import note1024 from "../../assets/note1024.png"
 import MainContext from '../MainContext'
+import convertOne from '../../tools/convert-one'
 
 momentDurationFormatSetup(moment)
 
 const MusicTable = () => {
     const {
-        playlist, setPlaylist,
+        playlist, setPlaylist, setPlaylistRaw,
         player,
     } = useContext(MainContext)
 
@@ -38,17 +39,16 @@ const MusicTable = () => {
         }
     }, [allMusic, err])
 
-    useEffect(() => {
-        if(player && playNow){
-            if(playlist.length > 1){
-                player.playNext()
-            }
-            else {
-                player.play()
-            }
-        }
-        localStorage.setItem("playlist", JSON.stringify(playlist))
-    }, [playlist])
+    // useEffect(() => {
+    //     if(player && playNow){
+    //         if(playlist.length > 1){
+    //             player.playNext()
+    //         }
+    //         else {
+    //             player.play()
+    //         }
+    //     }
+    // }, [playlist])
 
     const start = () => {
         setTimeout(() => {
@@ -206,11 +206,10 @@ const MusicTable = () => {
             ),
             onCell: (record) => ({
                 onClick: () => {
-                    playNow = false
-                    setPlaylist(playlist => ([
-                        ...playlist,
-                        record,
-                    ]))
+                    // FIXME: ghost bug.
+                    // while url is correct, everything is correct, it fails to load music
+                    player.appendAudio(playlist.length, [convertOne(record)])
+                    player.play()
                 }
             })
         },

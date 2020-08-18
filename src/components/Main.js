@@ -10,6 +10,8 @@ import Admin from "./Admin"
 import MainContext from "./MainContext"
 import Player from './Player'
 import Welcome from './Welcome'
+import Mine from './Mine'
+import convert from "../tools/convert"
 
 const { Header, Content, Footer } = Layout
 
@@ -20,9 +22,13 @@ const Main = () => {
 
     const stored = localStorage.getItem("playlist")
 
-    const [playlist, setPlaylist] = useState(
+    const [playlist, setPlaylistRaw] = useState(
         stored ? JSON.parse(stored) : []
     )
+
+    const setPlaylist = music => {
+        setPlaylistRaw(convert(music))
+    }
 
     const [audioInfo, setAudioInfo] = useState(null)
     const [player, setPlayer] = useState(null)
@@ -33,6 +39,21 @@ const Main = () => {
         let audioInfo = audioLists.find(e => e.id === currentPlayId)
         if (audioInfo) {
             const { name, singer, cover, album, _id } = audioInfo
+            document.title = `${name} - ${singer}`
+            setAudioInfo({
+                title: name,
+                artist: singer,
+                picture: [cover],
+                album,
+                _id,
+            })
+        }
+    }
+
+    const onAudioPlay = (audioInfo) => {
+        if (audioInfo) {
+            const { name, singer, cover, album, _id } = audioInfo
+            document.title = `${name} - ${singer}`
             setAudioInfo({
                 title: name,
                 artist: singer,
@@ -45,7 +66,7 @@ const Main = () => {
 
     return (
         <MainContext.Provider value={{
-            playlist, setPlaylist,
+            playlist, setPlaylist, setPlaylistRaw,
             audioInfo, setAudioInfo,
             player,
         }}>
@@ -61,25 +82,33 @@ const Main = () => {
                             history.push(key)
                         }}
                     >
-                        <Menu.Item key="/radio">Radio</Menu.Item>
+                        <Menu.Item key="/player">Player</Menu.Item>
                         <Menu.Item key="/library">Library</Menu.Item>
                         <Menu.Item key="/mylist">My List</Menu.Item>
                         <Menu.Item key="/setting">Setting</Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 1vw' }}>
-                    <Auth>
+                    <Auth exceptions={["share"]}>
                         <Switch>
                             <Route path="/library">
                                 <Music />
                             </Route>
 
-                            <Route path="/radio">
+                            <Route path="/player">
                                 <Radio />
                             </Route>
 
-                            <Route path="/mylist">
+                            <Route path="/radio">
+                                <Radio radio />
+                            </Route>
 
+                            <Route path="/share">
+                                <Radio share />
+                            </Route>
+
+                            <Route path="/mylist">
+                                <Mine />
                             </Route>
 
                             <Route path="/setting">
@@ -116,6 +145,7 @@ const Main = () => {
                         getPlayer={player => {
                             setPlayer(player)
                         }}
+                        onAudioPlay={onAudioPlay}
                     />
                 </Footer>
 
