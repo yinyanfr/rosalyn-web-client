@@ -206,8 +206,6 @@ const MusicTable = () => {
             ),
             onCell: (record) => ({
                 onClick: () => {
-                    // FIXME: ghost bug.
-                    // while url is correct, everything is correct, it fails to load music
                     if(playlist.length){
                         player.appendAudio(playlist.length, [convertOne(record)])
                     }
