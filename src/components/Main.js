@@ -51,6 +51,20 @@ const Main = () => {
         }
     }
 
+    useEffect(() => {
+        if (location.pathname.match(/^\/share/) && playlist.length) {
+            const { name, singer, cover, album, _id } = playlist[0]
+            document.title = `${name} - ${singer}`
+            setAudioInfo({
+                title: name,
+                artist: singer,
+                picture: [cover],
+                album,
+                _id,
+            })
+        }
+    }, [playlist])
+
     const onAudioPlay = (audioInfo) => {
         if (audioInfo) {
             const { name, singer, cover, album, _id } = audioInfo
@@ -78,7 +92,11 @@ const Main = () => {
                     <Menu
                         theme="dark"
                         mode="horizontal"
-                        defaultSelectedKeys={[location.pathname]}
+                        defaultSelectedKeys={[
+                            location.pathname === "/radio" || location.pathname.match(/^\/share/)
+                                ? "/player"
+                                : location.pathname
+                        ]}
                         onSelect={({ item, key }) => {
                             history.push(key)
                         }}

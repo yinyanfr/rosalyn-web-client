@@ -16,7 +16,17 @@ const RadioMusic = ({ audioInfo }) => {
         title, artist, album, picture, _id
     } = audioInfo
 
-    const [share, {loading, res, err}] = useReq("POST", "/music/share")
+    const [share, { loading, res, err }] = useReq("POST", "/music/share")
+
+    useEffect(() => {
+        if (res) {
+            copy(`${window.location.origin}/share/${res.body?.shareId}`)
+            message.success("Link copied to copyboard")
+        }
+        if(err){
+            message.error("Failed to generate share link.")
+        }
+    }, [res, err])
 
     return (
         <article className="single-music">
@@ -57,28 +67,6 @@ const RadioMusic = ({ audioInfo }) => {
                         <ShareAltOutlined />
                     </div>
                 </div>
-
-                {
-                    res
-                    ? (
-                        <div
-                            onClick={() => {
-                                copy(`${window.location.origin}/share/${res.body?.shareId}`)
-                                message.success("Success")
-                            }}
-                        >
-                            <Alert type="success" message={`Click to copy ${window.location.origin}/share/${res.body?.shareId}`}/>
-                        </div>
-                    )
-                    : ""
-                }
-                {
-                    err
-                    ? (
-                        <Alert type="error" message="Failed to share." />
-                    )
-                    : ""
-                }
             </div>
         </article>
     )
