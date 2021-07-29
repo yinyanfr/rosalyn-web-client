@@ -12,6 +12,7 @@ import Player from './Player'
 import Welcome from './Welcome'
 import Mine from './Mine'
 import convert from "../tools/convert"
+import useReq from '../services/useReq'
 
 const { Header, Content, Footer } = Layout
 
@@ -26,6 +27,9 @@ const Main = () => {
         // stored ? JSON.parse(stored) : []
         []
     )
+
+    const [getFavorite, { res: favoriteRes }] = useReq("GET", "/music/favorite")
+    const [favorite, setFavorite] = useState([])
 
     const setPlaylist = music => {
         setPlaylistRaw(convert(music))
@@ -65,6 +69,15 @@ const Main = () => {
         }
     }, [playlist])
 
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        getFavorite({ token })
+    }, [])
+
+    useEffect(() => {
+        setFavorite(favoriteRes?.body)
+    }, [favoriteRes])
+
     const onAudioPlay = (audioInfo) => {
         if (audioInfo) {
             const { name, singer, cover, album, _id } = audioInfo
@@ -83,7 +96,7 @@ const Main = () => {
         <MainContext.Provider value={{
             playlist, setPlaylist, setPlaylistRaw,
             audioInfo, setAudioInfo,
-            player,
+            player, favorite, setFavorite,
         }}>
             <Layout className="main-layout">
                 <Header className="header">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Typography, Alert, message } from "antd"
 import {
     HeartFilled, HeartOutlined,
@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons"
 import useReq from '../../services/useReq'
 import copy from 'copy-to-clipboard'
+import MainContext from '../MainContext'
 
 const { Title } = Typography
 
@@ -17,6 +18,9 @@ const RadioMusic = ({ audioInfo }) => {
     } = audioInfo
 
     const [share, { loading, res, err }] = useReq("POST", "/music/share")
+    const [favor] = useReq("POST", "/music/taste")
+
+    const {favorite, setFavorite} = useContext(MainContext)
 
     useEffect(() => {
         if (res) {
@@ -44,8 +48,31 @@ const RadioMusic = ({ audioInfo }) => {
                     <p>{album}</p>
                 </div>
                 <div className="music-favor">
-                    <div>
-                        <HeartOutlined />
+                    <div
+                        onClick={() => {
+                            const token = localStorage.getItem("token")
+                            if(favorite?.includes(_id)) {
+                                setFavorite(favorite => favorite.filter(e => e !== _id))
+                            }
+                            else {
+                                setFavorite(favorite => ([
+                                    ...favorite, _id,
+                                ]))
+                            }
+                            favor({
+                                token,
+                                body: {
+                                    musicId: _id,
+                                    favor: true
+                                }
+                            })
+                        }}
+                    >
+                        {
+                            favorite?.includes(_id)
+                            ? <HeartFilled />
+                            : <HeartOutlined />
+                        }
                     </div>
                     <div>
                         <DeleteOutlined />

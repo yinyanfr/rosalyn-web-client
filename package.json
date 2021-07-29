@@ -14,7 +14,6 @@
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
     "music-metadata-browser": "^2.1.0",
-    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-contexify": "^4.1.1",
     "react-dom": "^16.13.1",
@@ -22,6 +21,7 @@
     "react-jinke-music-player": "^4.16.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "sass": "^1.36.0",
     "superagent": "^5.3.1"
   },
   "scripts": {

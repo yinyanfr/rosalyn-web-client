@@ -11,33 +11,19 @@ import convertOne from '../../tools/convert-one'
 
 momentDurationFormatSetup(moment)
 
-const MusicTable = () => {
+const MusicTable = ({data, setData, allMusic, loading}) => {
     const {
         playlist, setPlaylist, setPlaylistRaw,
-        player,
+        player, favorite, setFavorite,
     } = useContext(MainContext)
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
 
-    const [getAllMusic, { loading, res: allMusic, err }] = useReq("GET", "/music/all")
-    const [data, setData] = useState(allMusic?.body)
+    const [favor] = useReq("POST", "/music/taste")
 
     let playNow = false
-
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        getAllMusic({ token })
-    }, [])
-
-    useEffect(() => {
-        if (allMusic) setData(allMusic.body)
-        if (err) {
-            console.log(err)
-            message.error("Failed to load music.")
-        }
-    }, [allMusic, err])
 
     // useEffect(() => {
     //     if(player && playNow){
@@ -217,9 +203,31 @@ const MusicTable = () => {
         },
         {
             key: "favor",
-            render: () => (
-                <HeartOutlined />
-            )
+            render: (_, record) => (
+                favorite?.includes(record._id)
+                ? <HeartFilled />
+                : <HeartOutlined />
+            ),
+            onCell: (record) => ({
+                onClick: () => {
+                    const token = localStorage.getItem("token")
+                    if(favorite?.includes(record._id)) {
+                        setFavorite(favorite => favorite.filter(e => e !== record._id))
+                    }
+                    else {
+                        setFavorite(favorite => ([
+                            ...favorite, record._id,
+                        ]))
+                    }
+                    favor({
+                        token,
+                        body: {
+                            musicId: record._id,
+                            favor: true
+                        }
+                    })
+                }
+            })
         },
         {
             key: "download",
