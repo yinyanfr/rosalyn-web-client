@@ -19,6 +19,8 @@ const RadioMusic = ({ audioInfo }) => {
 
     const [share, { loading, res, err }] = useReq("POST", "/music/share")
     const [favor] = useReq("POST", "/music/taste")
+    const [getInfo, {res: infoRes}] = useReq("GET", "/music/info")
+    const [coverImage, setCoverImage] = useState(picture)
 
     const {favorite, setFavorite} = useContext(MainContext)
 
@@ -32,13 +34,28 @@ const RadioMusic = ({ audioInfo }) => {
         }
     }, [res, err])
 
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        getInfo({token, params: [_id]})
+    }, [_id])
+
+    useEffect(() => {
+        if(infoRes?.body?.picture?.length) {
+            console.log("fucking rendered")
+            if(infoRes.body.picture[0]?.data) {
+                setCoverImage(`data:image/jpeg;base64,${infoRes.body.picture[0].data}`)
+            }
+            
+        }
+    }, [infoRes])
+
     return (
         <article className="single-music">
             <div className="music-icon">
                 <img
                     className="music-icon-image"
                     alt="cover"
-                    src={picture}
+                    src={coverImage}
                 />
             </div>
             <div className="music-info">
