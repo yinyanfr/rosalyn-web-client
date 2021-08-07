@@ -75,7 +75,7 @@ const Main = () => {
     }, [])
 
     useEffect(() => {
-        setFavorite(favoriteRes?.body)
+        setFavorite(favoriteRes?.body ?? [])
     }, [favoriteRes])
 
     const onAudioPlay = (audioInfo) => {

@@ -19,33 +19,33 @@ const RadioMusic = ({ audioInfo }) => {
 
     const [share, { loading, res, err }] = useReq("POST", "/music/share")
     const [favor] = useReq("POST", "/music/taste")
-    const [getInfo, {res: infoRes}] = useReq("GET", "/music/info")
+    const [getInfo, { res: infoRes }] = useReq("GET", "/music/info")
     const [coverImage, setCoverImage] = useState(picture)
 
-    const {favorite, setFavorite} = useContext(MainContext)
+    const { favorite, setFavorite } = useContext(MainContext)
 
     useEffect(() => {
         if (res) {
             copy(`${window.location.origin}/share/${res.body?.shareId}`)
             message.success("Link copied to copyboard")
         }
-        if(err){
+        if (err) {
             message.error("Failed to generate share link.")
         }
     }, [res, err])
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-        getInfo({token, params: [_id]})
+        getInfo({ token, params: [_id] })
     }, [_id])
 
     useEffect(() => {
-        if(infoRes?.body?.picture?.length) {
+        if (infoRes?.body?.picture?.length) {
             console.log("fucking rendered")
-            if(infoRes.body.picture[0]?.data) {
+            if (infoRes.body.picture[0]?.data) {
                 setCoverImage(`data:image/jpeg;base64,${infoRes.body.picture[0].data}`)
             }
-            
+
         }
     }, [infoRes])
 
@@ -68,7 +68,7 @@ const RadioMusic = ({ audioInfo }) => {
                     <div
                         onClick={() => {
                             const token = localStorage.getItem("token")
-                            if(favorite?.includes(_id)) {
+                            if (favorite?.includes(_id)) {
                                 setFavorite(favorite => favorite.filter(e => e !== _id))
                             }
                             else {
@@ -87,8 +87,8 @@ const RadioMusic = ({ audioInfo }) => {
                     >
                         {
                             favorite?.includes(_id)
-                            ? <HeartFilled />
-                            : <HeartOutlined />
+                                ? <HeartFilled />
+                                : <HeartOutlined />
                         }
                     </div>
                     <div>
