@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { FC, useEffect, useContext } from 'react'
 import { Form, Input, Button, Checkbox, Spin, Alert } from 'antd'
 import useReq from '../services/useReq'
 import AppContext from '../AppContext'
@@ -11,7 +11,11 @@ const tailLayout = {
     wrapperCol: { offset: 2, span: 16 },
 }
 
-const LoginForm = ({ register }) => {
+interface ILoginForm {
+    register?: boolean
+}
+
+const LoginForm: FC<ILoginForm> = ({ register }) => {
 
     const [run, { loading, res, err }] = useReq("POST", (register ? "/register" : "/login"))
     const { setUser } = useContext(AppContext)

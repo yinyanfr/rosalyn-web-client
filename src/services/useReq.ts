@@ -1,18 +1,20 @@
 import { useState } from 'react'
-import request from "superagent"
+import request, { Response } from "superagent"
 
-const withParams = (uri, params) => {
+type HTTPProtocole = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+
+const withParams = (uri: string, params: string[]) => {
     const tail = params.join('/')
     return `${uri}/${tail}`
 }
 
-const useReq = (type, uri) => {
+const useReq = (type: HTTPProtocole, uri: string): [any, { loading: boolean, res: any, err: any }] => {
     const [loading, setLoading] = useState(false)
-    const [res, setRes] = useState(null)
+    const [res, setRes] = useState<Response | null>(null)
     const [err, setErr] = useState(null)
 
-    const run = ({body, query, params, token} = {}) => {
-        if(type.toLowerCase() === "get"){
+    const run = ({ body, query, params, token }: any = {}) => {
+        if (type.toLowerCase() === "get") {
             return (
                 request.get(params ? withParams(uri, params) : uri)
                     .set("x-auth", token ? token : "")
@@ -26,7 +28,7 @@ const useReq = (type, uri) => {
         }
         else {
             return (
-                request[type.toLowerCase()](uri)
+                (<any>request)[type.toLowerCase()](uri) // typescript sucks
                     .set("x-auth", token ? token : "")
                     .send(body ? body : {})
                     .then(setRes)
@@ -35,7 +37,7 @@ const useReq = (type, uri) => {
         }
     }
 
-    return [run, {loading, res, err}]
+    return [run, { loading, res, err }]
 }
 
 export default useReq

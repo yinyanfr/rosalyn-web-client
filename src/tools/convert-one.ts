@@ -1,6 +1,6 @@
 import note1024 from "../assets/note1024.png"
 
-const convertOne = (music) => {
+const convertOne = (music: any) => {
     const token = localStorage.getItem("token")
     const {
         title: name,
